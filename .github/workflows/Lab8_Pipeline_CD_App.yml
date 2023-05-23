@@ -27,7 +27,17 @@ jobs:
       - name: Get AKS Credentials
         run: |
           az aks get-credentials --resource-group ${{ env.RG_NAME }} --name ${{ env.CLUSTER_NAME }}
-
+      
+      - name: creation du secret
+        run: |
+          cd Kubernetes/Manifests/coolapi
+          kubectl apply -f 1_namespace.yml
+          kybectl create secret docker-registry "acr-secret" \
+          --namespace "coolapi" \
+          --docker-server="acrfhi2023.azurecr.io" \
+          --docker-username="acrfhi2023" \
+          --docker-password="Oo1MfqVP+PGqknsfZV90+Z71mJCBOYZb9vHUe/Dnu1+ACRA+X7xo" 
+          
       - name: Deploiement application dans AKS
         run: |      
           cd Kubernetes/Manifests/coolapi          
